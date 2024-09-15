@@ -1,15 +1,19 @@
 # Requisitos previos
+- Familiaridad con la línea de comandos.
+- Instalar [Node.js](https://nodejs.org/en) versión 18.3 o superior.
 
-Familiaridad con la línea de comandos
-Instalar [Node.js](https://nodejs.org/en) versión 18.3 o superior
 
-# Instalación de Vue CLI globalmente o en una carpeta en específica
+
+# Instalación de Vue CLI 
+
+- Global
 ```sh
 npm create vue@latest
 
 
 ```
 
+- En una Carpeta
 ```sh
 npx create-vue@latest
 ```
@@ -17,8 +21,10 @@ npx create-vue@latest
 
 
 
+
+
 # Crear un nuevo proyecto
-[Descripción de la imagen](https://img.freepik.com/foto-gratis/belleza-otonal-abstracta-patron-venas-hoja-multicolor-generado-ia_188544-9871.jpg?t=st=1726416631~exp=1726420231~hmac=6805e0b490093479bb24c1372e6a4513a8790ce3de8784d5a44b5db4cc3ab9e5&w=996)
+![Descripción de la imagen](https://img.freepik.com/foto-gratis/belleza-otonal-abstracta-patron-venas-hoja-multicolor-generado-ia_188544-9871.jpg?t=st=1726416631~exp=1726420231~hmac=6805e0b490093479bb24c1372e6a4513a8790ce3de8784d5a44b5db4cc3ab9e5&w=996)
 
 
 ## Recommended IDE Setup
