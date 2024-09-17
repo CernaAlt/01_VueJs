@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@vue/runtime-dom": "^3.5.5",
     "vue": "^3.4.29",
     "vue-primarysite": "file:"
   },

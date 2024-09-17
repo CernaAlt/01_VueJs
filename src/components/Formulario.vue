@@ -1,6 +1,7 @@
 <!-- FormComponent.vue -->
 <template>
-    <form @submit.prevent="handleSubmit" class="space-y-4">
+    //Esta directiva se usa para manejar eventos de formulario
+    <form @submit.prevent="datosForm" class="space-y-4">
         <div>
             <label for="name" class="block text-sm font-medium">Name:</label>
             <input type="text" v-model="name" id="name" required
@@ -20,24 +21,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
     name: 'FormComponent',
-    data() {
-        return {
-            name: '',
-            email: ''
-        };
-    },
-    methods: {
-        handleSubmit() {
+    setup(_, { emit }) {
+        const name = ref<string>('');  // Declare reactive variables with types
+        const email = ref<string>('');
+
+        const datosForm = () => {
             const formData = {
-                name: this.name,
-                email: this.email
+                name: name.value,
+                email: email.value
             };
-            this.$emit('submit', formData);
-        }
+            emit('submit', formData);
+        };
+
+        return {
+            name,
+            email,
+            datosForm
+        };
     }
 });
 </script>

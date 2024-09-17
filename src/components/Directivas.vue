@@ -22,9 +22,9 @@ const buttonClass = ref('bg-blue-500')
 
 <template>
     <section class="bg-white text-black p-10">
-        <h1 class="text-2xl font-bold">Directivas</h1>
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center">01: v-if y v-else</h1>
         <!--v-if y v-else-->
-        <div>
+        <div class="mt-4">
             <button @click="showText = !showText" class="bg-blue-500 text-white py-2 px-4 rounded">
                 Toggle Mensaje
             </button>
@@ -35,8 +35,9 @@ const buttonClass = ref('bg-blue-500')
 
     </section>
 
-    <section>
+    <section class="bg-white text-black p-10">
         <!-- Usamos v-for para iterar sobre una lista -->
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center">02: v-for</h1>
         <ul class="mt-4">
             <li v-for="(item, index) in items" :key="index" class="py-2">
                 {{ index + 1 }}. {{ item }}
@@ -44,9 +45,11 @@ const buttonClass = ref('bg-blue-500')
         </ul>
     </section>
 
-    <section>
+    <section class="bg-white text-black p-10">
         <!-- Usamos v-model para enlazar el input con la variable -->
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center mb-3">03: v-model</h1>
         <input 
+
             v-model="inputValue" 
             class="border border-gray-300 rounded py-2 px-4"
             placeholder="Escribe algo" />
@@ -54,9 +57,10 @@ const buttonClass = ref('bg-blue-500')
         <p class="mt-4 text-lg">Has escrito: {{ inputValue }}</p>
     </section>
 
-    <section>
+    <section class="bg-white text-black p-10">
 
         <!-- Usamos v-bind para enlazar dinámicamente la clase del botón -->
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center mb-3"> 04: v-bind</h1>
         <button 
             :class="buttonClass" 
             @click="isActive = !isActive; buttonClass = isActive ? 'bg-blue-500' : 'bg-red-500'"

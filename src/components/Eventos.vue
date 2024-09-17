@@ -40,10 +40,10 @@ const handleSubmit = () => {
 </script>
 
 <template>
-    <h1>Eventos</h1>
 
-    <section>
-        <h1 class="text-2xl font-bold">Eventos - Click</h1>
+
+    <section class="bg-white text-black p-10">
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center mb-3">Eventos - Click</h1>
 
         <!-- Usamos @click para manejar el evento -->
         <button @click="increment" class="bg-blue-500 text-white py-2 px-4 rounded">
@@ -52,8 +52,8 @@ const handleSubmit = () => {
         <p class="mt-4">Valor del contador: {{ counter }}</p>
     </section>
 
-    <section>
-        <h1 class="text-2xl font-bold">Eventos - Input</h1>
+    <section class="bg-white text-black p-10">
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center mb-3">Eventos - Input</h1>
 
         <!-- Usamos @input para manejar el evento -->
         <input 
@@ -66,9 +66,9 @@ const handleSubmit = () => {
 
     </section>
 
-    <section>
+    <section class="bg-white text-black p-10">
 
-        <h1 class="text-2xl font-bold">Eventos - Change</h1>
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center mb-3">Eventos - Change</h1>
 
         <!-- Usamos @change para manejar el evento -->
         <select @change="handleChange" class="border border-gray-300 rounded py-2 px-4">
@@ -81,8 +81,8 @@ const handleSubmit = () => {
         <p class="mt-4">Has seleccionado: {{ selectedOption }}</p>
     </section>
 
-    <section>
-        <h1 class="text-2xl font-bold">Eventos - Submit</h1>
+    <section class="bg-white text-black p-10">
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center mb-3">Eventos - Submit</h1>
 
         <!-- Usamos @submit.prevent para manejar el evento de envío y evitar que recargue la página -->
         <form @submit.prevent="handleSubmit" class="flex flex-col space-y-4">
@@ -105,7 +105,6 @@ const handleSubmit = () => {
 
         <p class="mt-4">Nombre: {{ formData.name }}</p>
         <p>Email: {{ formData.email }}</p>
-
     </section>
 
 </template>

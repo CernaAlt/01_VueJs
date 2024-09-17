@@ -15,7 +15,6 @@ npm create vue@latest
 npx create-vue@latest
 ```
 
-
 ## Recommended IDE Setup
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
@@ -34,8 +33,12 @@ npm run dev
 
 
 # Crear un nuevo proyecto
-![Descripción de la imagen](https://img.freepik.com/foto-gratis/belleza-otonal-abstracta-patron-venas-hoja-multicolor-generado-ia_188544-9871.jpg?t=st=1726416631~exp=1726420231~hmac=6805e0b490093479bb24c1372e6a4513a8790ce3de8784d5a44b5db4cc3ab9e5&w=996)
+![Descripción de la imagen](https://drive.google.com/file/d/1daE_Xvdrg7IdVXF2139q-5vQo26SnrYn/view?usp=drive_link)
 
+![Descripción de la imagen](https://drive.google.com/file/d/14hDVdYL0jPY3CmYS32c3DtaYFDtrQva5/view?usp=drive_link)
+
+
+![Descripción de la imagen](https://drive.google.com/file/d/1RDrRkZoryyuRvdNLiNVrz24rJGPetVdK/view?usp=drive_link)
 
 
 
