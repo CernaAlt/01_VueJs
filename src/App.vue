@@ -2,13 +2,15 @@
 import HelloWorld from './components/HelloWorld.vue'
 
 
-//
 
 //slot
 import ComponenteHijo from './components/slots/ComponenteHijo.vue';
 import Card from './components/Cards/Card.vue'
 import ComponenteHijo01 from './components/slots/ComponenteHijo01.vue';
 import ComponenteHijo02 from './components/slots/ComponenteHijo02.vue';
+
+//reactividad
+import Ejemplo from './components/Reactivida/Ejemplo.vue';
 
 //Eventos
 import Eventos from './components/Eventos.vue';
@@ -144,6 +146,13 @@ import Formulario from './components/Formulario.vue';
         </div>
 
       </div>
+    </section>
+
+    <!--Reactividad-->
+    <section class="">
+      <h1 class="text-2xl font-bold text-center text-white my-5">Reactive</h1>
+      <Ejemplo/>
+
     </section>
 
     <!--Directivas-->

@@ -24,7 +24,10 @@
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
+    // Define the name of the component
     name: 'FormComponent',
+
+    // Declare reactive variables with types
     setup(_, { emit }) {
         const name = ref<string>('');  // Declare reactive variables with types
         const email = ref<string>('');

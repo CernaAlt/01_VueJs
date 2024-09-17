@@ -33,12 +33,12 @@ npm run dev
 
 
 # Crear un nuevo proyecto
-![Descripción de la imagen](https://drive.google.com/file/d/1daE_Xvdrg7IdVXF2139q-5vQo26SnrYn/view?usp=drive_link)
+![Descripción de la imagen](https://drive.google.com/file/d/1daE_Xvdrg7IdVXF2139q-5vQo26SnrYn/view)
 
-![Descripción de la imagen](https://drive.google.com/file/d/14hDVdYL0jPY3CmYS32c3DtaYFDtrQva5/view?usp=drive_link)
+![Descripción de la imagen](https://drive.google.com/file/d/14hDVdYL0jPY3CmYS32c3DtaYFDtrQva5/view?usp=sharing)
 
 
-![Descripción de la imagen](https://drive.google.com/file/d/1RDrRkZoryyuRvdNLiNVrz24rJGPetVdK/view?usp=drive_link)
+![Descripción de la imagen](https://drive.google.com/file/d/1RDrRkZoryyuRvdNLiNVrz24rJGPetVdK/view?usp=sharing)
 
 
 
