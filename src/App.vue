@@ -13,10 +13,10 @@ import ComponenteHijo02 from './components/slots/ComponenteHijo02.vue';
 import Ejemplo from './components/Reactivida/Ejemplo.vue';
 
 //Eventos
-import Eventos from './components/Eventos.vue';
+import Eventos from './components/events/Eventos.vue';
 
 //Directivas
-import Directivas from './components/Directivas.vue';
+import Directivas from './components/directives/Directivas.vue';
 
 //Formulario
 import Formulario from './components/Formulario.vue';

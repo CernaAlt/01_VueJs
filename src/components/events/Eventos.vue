@@ -4,17 +4,18 @@ import { ref } from 'vue'
 
 //Event @click
 //variables
-const counter = ref(0)
+const contador = ref(0)
 
 //
 const increment = () => {
-  counter.value++
+  contador.value++
 }
 
 //Event @input
 const textInput = ref('')
 
-const handleInput = (event: Event) => {
+//manejamos el eveneto
+const IngreseText = (event: Event) => {
   textInput.value = (event.target as HTMLInputElement).value
 }
 
@@ -49,7 +50,7 @@ const handleSubmit = () => {
         <button @click="increment" class="bg-blue-500 text-white py-2 px-4 rounded">
             Incrementar contador
         </button>
-        <p class="mt-4">Valor del contador: {{ counter }}</p>
+        <p class="mt-4">Valor del contador: {{ contador }}</p>
     </section>
 
     <section class="bg-white text-black p-10">
@@ -59,7 +60,7 @@ const handleSubmit = () => {
         <input 
             type="text" 
             class="border border-gray-300 rounded py-2 px-4"
-            @input="handleInput"
+            @input="IngreseText"
             placeholder="Escribe algo" />
 
         <p class="mt-4">Has escrito: {{ textInput }}</p>

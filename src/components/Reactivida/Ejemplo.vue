@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Import ref from Vue to use reactive variables in the component
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 
 // Variables
 const count = ref(0)
@@ -12,6 +12,9 @@ const form = reactive({
     lastName: '',
     age: 0
 })
+
+//computed: returns a calculated value based on reactive dependencies
+const fullName = computed(() => `${form.firstName} ${form.lastName}`)
 </script>
 
 <template>
@@ -25,7 +28,7 @@ const form = reactive({
     </section>
 
     <section class="bg-white text-black p-10">
-        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center">Reactividad - Formulario</h1>
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center my-4">Reactividad - Formulario</h1>
 
         <input v-model="form.firstName" type="text" placeholder="Nombre"
             class="border border-gray-300 rounded py-2 px-4 mb-4" />
@@ -35,9 +38,15 @@ const form = reactive({
 
 
 
-        <input v-model="form.age" type="number" placeholder="Edad"
-            class="border border-gray-300 rounded py-2 px-4" />
+        <input v-model="form.age" type="number" placeholder="Edad" class="border border-gray-300 rounded py-2 px-4" />
 
         <p class="mt-4">Nombre completo: {{ form.firstName }} {{ form.lastName }} Edad: {{ form.age }}</p>
+    </section>
+
+    <section class="bg-white text-black p-10">
+        <!-- Mostrar la propiedad computada -->
+        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center my-4">Propiedad Computada</h1>
+        <p></p>
+        <p>Nombre completo: {{ fullName }}</p>
     </section>
 </template>
