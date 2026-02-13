@@ -1,207 +1,371 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
+type ItunesSong = {
+  trackId: number
+  trackName: string
+  artistName: string
+  collectionName: string
+  artworkUrl100?: string
+  previewUrl?: string
+}
 
+type RadioStation = {
+  stationuuid: string
+  name: string
+  country: string
+  tags: string
+  favicon: string
+  url_resolved: string
+}
 
-//slot
-import ComponenteHijo from './components/slots/ComponenteHijo.vue';
-import Card from './components/Cards/Card.vue'
-import ComponenteHijo01 from './components/slots/ComponenteHijo01.vue';
-import ComponenteHijo02 from './components/slots/ComponenteHijo02.vue';
+type FavoriteItem = {
+  id: string
+  title: string
+  subtitle: string
+  image?: string
+  previewUrl: string
+  source: 'iTunes' | 'RadioBrowser'
+}
 
-//reactividad
-import Ejemplo from './components/Reactivida/Ejemplo.vue';
+const query = ref('shakira')
+const radioQuery = ref('pop')
+const songs = ref<ItunesSong[]>([])
+const radios = ref<RadioStation[]>([])
+const favorites = ref<FavoriteItem[]>([])
+const loadingSongs = ref(false)
+const loadingRadio = ref(false)
+const errorSongs = ref('')
+const errorRadio = ref('')
 
-//Eventos
-import Eventos from './components/events/Eventos.vue';
+const activeTab = ref<'songs' | 'radios' | 'favorites'>('songs')
 
-//Directivas
-import Directivas from './components/directives/Directivas.vue';
+const currentAudio = ref('')
 
-//Formulario
-import Formulario from './components/Formulario.vue';
+const isFavorite = (id: string) => favorites.value.some((item) => item.id === id)
 
+const favoriteCountText = computed(() =>
+  favorites.value.length === 1 ? '1 favorito' : `${favorites.value.length} favoritos`
+)
+
+const saveFavorites = () => {
+  localStorage.setItem('music-hub-favorites', JSON.stringify(favorites.value))
+}
+
+const loadFavorites = () => {
+  const rawData = localStorage.getItem('music-hub-favorites')
+  if (!rawData) return
+
+  try {
+    favorites.value = JSON.parse(rawData)
+  } catch {
+    favorites.value = []
+  }
+}
+
+const searchSongs = async () => {
+  loadingSongs.value = true
+  errorSongs.value = ''
+
+  try {
+    const response = await fetch(
+      `https://itunes.apple.com/search?term=${encodeURIComponent(query.value)}&entity=song&limit=18`
+    )
+
+    if (!response.ok) {
+      throw new Error('No se pudo obtener información de iTunes.')
+    }
+
+    const data = await response.json()
+    songs.value = data.results
+  } catch {
+    errorSongs.value = 'No fue posible consultar iTunes en este momento.'
+    songs.value = []
+  } finally {
+    loadingSongs.value = false
+  }
+}
+
+const searchRadios = async () => {
+  loadingRadio.value = true
+  errorRadio.value = ''
+
+  try {
+    const response = await fetch(
+      `https://de1.api.radio-browser.info/json/stations/search?name=${encodeURIComponent(radioQuery.value)}&limit=18&hidebroken=true`
+    )
+
+    if (!response.ok) {
+      throw new Error('No se pudo consultar Radio Browser.')
+    }
+
+    radios.value = await response.json()
+  } catch {
+    errorRadio.value = 'No fue posible consultar emisoras en este momento.'
+    radios.value = []
+  } finally {
+    loadingRadio.value = false
+  }
+}
+
+const addSongToFavorites = (song: ItunesSong) => {
+  if (!song.previewUrl || isFavorite(`song-${song.trackId}`)) return
+
+  favorites.value.push({
+    id: `song-${song.trackId}`,
+    title: song.trackName,
+    subtitle: `${song.artistName} · ${song.collectionName}`,
+    image: song.artworkUrl100,
+    previewUrl: song.previewUrl,
+    source: 'iTunes'
+  })
+}
+
+const addRadioToFavorites = (radio: RadioStation) => {
+  if (!radio.url_resolved || isFavorite(`radio-${radio.stationuuid}`)) return
+
+  favorites.value.push({
+    id: `radio-${radio.stationuuid}`,
+    title: radio.name,
+    subtitle: `${radio.country} · ${radio.tags || 'Sin etiquetas'}`,
+    image: radio.favicon,
+    previewUrl: radio.url_resolved,
+    source: 'RadioBrowser'
+  })
+}
+
+const removeFavorite = (id: string) => {
+  favorites.value = favorites.value.filter((item) => item.id !== id)
+}
+
+watch(favorites, saveFavorites, { deep: true })
+
+onMounted(async () => {
+  loadFavorites()
+  await Promise.all([searchSongs(), searchRadios()])
+})
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="app-shell">
+    <header class="hero">
+      <h1>Music Hub Multiplataforma</h1>
+      <p>
+        Explora canciones y estaciones en vivo desde diferentes APIs para centralizar tu
+        descubrimiento musical en una sola app.
+      </p>
+    </header>
 
-    <div class="wrapper">
-      <HelloWorld msg="Bienvenidos!" />
-    </div>
-  </header>
+    <nav class="tabs">
+      <button :class="{ active: activeTab === 'songs' }" @click="activeTab = 'songs'">Canciones (iTunes)</button>
+      <button :class="{ active: activeTab === 'radios' }" @click="activeTab = 'radios'">Radio en vivo (RadioBrowser)</button>
+      <button :class="{ active: activeTab === 'favorites' }" @click="activeTab = 'favorites'">
+        Favoritos · {{ favoriteCountText }}
+      </button>
+    </nav>
 
-  <main>
-  
-    <!--Componenetes-->
-    <section class="bg-white text-black p-10">
-      <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center">Componentes</h1>
-      <p class="text-ml font-sans text-justify py-3">
-        En Vue.js, los componentes son piezas reutilizables
-        de código que encapsulan una parte de la interfaz de usuario. Son una de las
-        características más importantes de Vue y te permiten
-        dividir tu aplicación en secciones pequeñas y manejables.
-        Cada componente puede tener su propia lógica, estructura y estilos
+    <section v-if="activeTab === 'songs'" class="panel">
+      <form class="search" @submit.prevent="searchSongs">
+        <input v-model="query" type="text" placeholder="Busca artista, canción o álbum" />
+        <button type="submit">Buscar</button>
+      </form>
+
+      <p v-if="loadingSongs" class="helper">Consultando iTunes…</p>
+      <p v-if="errorSongs" class="error">{{ errorSongs }}</p>
+
+      <div class="grid">
+        <article v-for="song in songs" :key="song.trackId" class="card">
+          <img :src="song.artworkUrl100 || 'https://placehold.co/200x200?text=Sin+imagen'" :alt="song.trackName" />
+          <h3>{{ song.trackName }}</h3>
+          <p>{{ song.artistName }}</p>
+          <small>{{ song.collectionName }}</small>
+
+          <audio v-if="song.previewUrl" controls :src="song.previewUrl" @play="currentAudio = song.previewUrl" />
+          <p v-else class="helper">No hay preview disponible.</p>
+
+          <button
+            class="secondary"
+            :disabled="!song.previewUrl || isFavorite(`song-${song.trackId}`)"
+            @click="addSongToFavorites(song)"
+          >
+            {{ isFavorite(`song-${song.trackId}`) ? 'Guardado' : 'Guardar en favoritos' }}
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section v-if="activeTab === 'radios'" class="panel">
+      <form class="search" @submit.prevent="searchRadios">
+        <input v-model="radioQuery" type="text" placeholder="Busca emisoras por nombre o género" />
+        <button type="submit">Buscar</button>
+      </form>
+
+      <p v-if="loadingRadio" class="helper">Consultando RadioBrowser…</p>
+      <p v-if="errorRadio" class="error">{{ errorRadio }}</p>
+
+      <div class="grid">
+        <article v-for="radio in radios" :key="radio.stationuuid" class="card">
+          <img :src="radio.favicon || 'https://placehold.co/200x200?text=Radio'" :alt="radio.name" />
+          <h3>{{ radio.name }}</h3>
+          <p>{{ radio.country }}</p>
+          <small>{{ radio.tags || 'Sin etiquetas' }}</small>
+
+          <audio v-if="radio.url_resolved" controls :src="radio.url_resolved" @play="currentAudio = radio.url_resolved" />
+          <p v-else class="helper">No hay stream disponible.</p>
+
+          <button
+            class="secondary"
+            :disabled="!radio.url_resolved || isFavorite(`radio-${radio.stationuuid}`)"
+            @click="addRadioToFavorites(radio)"
+          >
+            {{ isFavorite(`radio-${radio.stationuuid}`) ? 'Guardado' : 'Guardar en favoritos' }}
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section v-if="activeTab === 'favorites'" class="panel">
+      <p class="helper" v-if="favorites.length === 0">
+        Aún no tienes favoritos. Guarda previews o radios desde las otras pestañas.
       </p>
 
-      <!--Componenetes Iniciales-->
-      <div class="flex gap-2 mt-5">
-        <Card title="Componente 01" content="La estrtura de este componenete lo podemos
-         en diferentes parte de nuestra web">
+      <div class="grid">
+        <article v-for="item in favorites" :key="item.id" class="card">
+          <img :src="item.image || 'https://placehold.co/200x200?text=Music+Hub'" :alt="item.title" />
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.subtitle }}</p>
+          <small>Fuente: {{ item.source }}</small>
 
-        </Card>
+          <audio controls :src="item.previewUrl" @play="currentAudio = item.previewUrl" />
 
-        <Card title="Componente 01" content="La estrtura de este componenete lo podemos
-         en diferentes parte de nuestra web">
-
-        </Card>
-
-        <Card title="Componente 01" content="La estrtura de este componenete lo podemos
-         en diferentes parte de nuestra web">
-
-        </Card>
-
-
-      </div>
-
-      <!--Esplicacion de los slot-->
-      <div class="mt-10">
-        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center">Componenetes + slot</h1>
-        <p class="text-ml font-sans text-justify py-3">
-          En Vue.js, los slots son una característica avanzada que permite a los
-          componentes recibir contenido dinámico de sus componentes padres, dándote
-          mayor flexibilidad para personalizar la interfaz de usuario.
-        </p>
-
-        <div class="flex gap-3">
-          <ComponenteHijo>
-            <h1>Este es un contenido dentro del slote del componente hijo</h1>
-          </ComponenteHijo>
-
-          <ComponenteHijo>
-            <h1>Este es un contenido dentro del slote del componente hijo</h1>
-          </ComponenteHijo>
-        </div>
-
-        <!--Slot con nombre-->
-        <div>
-          <h1 class="text-md font-bold border-b-2 border-cyan-400 text-center my-5">Slot con nombres</h1>
-
-          <!--Aqui podemos podemos poner los componenetes-->
-          <div class="flex gap-3">
-
-            <ComponenteHijo01>
-              <template v-slot:header>
-                <h1>Encabezado personalizado</h1>
-              </template>
-
-
-              <p>Este es el contenido principal.</p>
-
-              <template v-slot:footer>
-                <p>Este es el pie de página personalizado.</p>
-              </template>
-
-            </ComponenteHijo01>
-
-
-            <ComponenteHijo01>
-              <template v-slot:header>
-                <h1>Encabezado personalizado</h1>
-              </template>
-
-
-              <p>Este es el contenido principal.</p>
-
-              <template v-slot:footer>
-                <p>Este es el pie de página personalizado.</p>
-              </template>
-            </ComponenteHijo01>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!--Componenetes Hijo Pasa datos al Padre-->
-      <div class="mt-10 ">
-        <h1 class="text-2xl font-bold border-b-2 border-cyan-400 text-center">Pasar datos de un componente hijo a un
-          padre
-        </h1>
-
-        <div class="flex gap-5 mt-1">
-          <ComponenteHijo02 v-slot="{ user }">
-            <p>Nombre del usuario: {{ user.nombre }}</p>
-            <p>Edad del usuario: {{ user.edad }}</p>
-            <p>Genero: {{ user.genero }}</p>
-          </ComponenteHijo02>
-
-          <ComponenteHijo02 v-slot="{ user }">
-            <p>Nombre del usuario: {{ user.nombre }}</p>
-            <p>Edad del usuario: {{ user.edad }}</p>
-            <p>Genero: {{ user.genero }}</p>
-          </ComponenteHijo02>
-        </div>
-
+          <button class="danger" @click="removeFavorite(item.id)">Eliminar</button>
+        </article>
       </div>
     </section>
-
-    <!--Reactividad-->
-    <section class="">
-      <h1 class="text-2xl font-bold text-center text-white my-5">Reactive</h1>
-      <Ejemplo/>
-
-    </section>
-
-    <!--Directivas-->
-    <section>
-      <h1 class="text-2xl font-bold text-center text-white my-5">Directivas</h1>
-      <Directivas />
-    </section>
-
-
-    <!--Eventos-->
-    <section class="">
-      <h1 class="text-2xl font-bold text-center text-white my-5">Eventos</h1>
-      <Eventos />
-    </section>
-
-    <!--formulario-->
-    <section >
-      <h1 class="text-2xl font-bold text-center text-white my-5">Eventos</h1>
-      <Formulario/>
-    </section>
-
-  </main>
-
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
+.app-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #e5e7eb;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.hero {
+  background: linear-gradient(135deg, #1f2937, #111827);
+  border: 1px solid #374151;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.hero h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.tabs button,
+.search button,
+.card button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.65rem 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tabs button {
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+.tabs button.active {
+  background: #2563eb;
+}
+
+.panel {
+  background: #111827;
+  border: 1px solid #374151;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.search {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.search input {
+  flex: 1;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  color: #e5e7eb;
+  padding: 0.65rem;
+}
+
+.search button {
+  background: #2563eb;
+  color: #fff;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.card h3 {
+  font-weight: 700;
+}
+
+.card p,
+.card small,
+.helper {
+  color: #9ca3af;
+}
+
+.card audio {
+  width: 100%;
+}
+
+.card .secondary {
+  background: #0f766e;
+  color: #fff;
+}
+
+.card .danger {
+  background: #dc2626;
+  color: #fff;
+}
+
+.error {
+  color: #fca5a5;
 }
 </style>

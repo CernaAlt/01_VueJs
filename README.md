@@ -1,51 +1,46 @@
-# Requisitos previos
-- Familiaridad con la línea de comandos.
-- Instalar [Node.js](https://nodejs.org/en) versión 18.3 o superior.
+# Music Hub Multiplataforma (Vue 3 + TypeScript)
 
+Aplicación base para descubrir música en una sola interfaz usando **múltiples APIs públicas**:
 
+- **iTunes Search API** para canciones y previews.
+- **Radio Browser API** para estaciones de radio online en vivo.
 
-# Instalación de Vue CLI 
-- Global
-```sh
-npm create vue@latest
-```
+> ⚠️ Tener “toda la música de internet” en una sola app no es viable con APIs públicas abiertas por límites de licencias, catálogos cerrados y derechos de reproducción. Este proyecto propone una arquitectura realista y extensible.
 
-- En una Carpeta
-```sh
-npx create-vue@latest
-```
+## Funcionalidades actuales
 
-## Recommended IDE Setup
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Búsqueda de canciones por artista, track o álbum.
+- Reproducción de previews desde iTunes.
+- Búsqueda de radios por nombre o género.
+- Reproducción de stream de radio en vivo.
+- Gestión de favoritos con persistencia en `localStorage`.
 
+## Requisitos
 
-## Configuración del proyecto
-```sh
+- Node.js 18+
+- npm 9+
+
+## Instalación
+
+```bash
 npm install
 ```
 
+## Desarrollo
 
-### Compilar y recargar en caliente para el desarrollo
-```sh
+```bash
 npm run dev
 ```
 
+## Build de producción
 
-
-# Crear un nuevo proyecto
-![Descripción de la imagen](https://drive.google.com/file/d/1daE_Xvdrg7IdVXF2139q-5vQo26SnrYn/view)
-
-![Descripción de la imagen](https://drive.google.com/file/d/14hDVdYL0jPY3CmYS32c3DtaYFDtrQva5/view?usp=sharing)
-
-
-![Descripción de la imagen](https://drive.google.com/file/d/1RDrRkZoryyuRvdNLiNVrz24rJGPetVdK/view?usp=sharing)
-
-
-
-
-### Type-Check, Compile and Minify for Production
-```sh
+```bash
 npm run build
 ```
 
+## Próximos pasos recomendados
 
+1. Integrar autenticación (OAuth) para Spotify/YouTube Music/Deezer.
+2. Crear un backend agregador que unifique resultados y maneje rate limits.
+3. Añadir reproducción continua con cola y reproductor global.
+4. Aplicar analítica de búsqueda y recomendaciones personalizadas.
